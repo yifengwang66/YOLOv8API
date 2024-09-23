@@ -29,4 +29,9 @@ thop>=0.1.1  # FLOPs computation
 
 # API -----------------------------------------
 Flask>=2.0
+dill
+timm
+einops
+efficientnet_pytorch
+
 

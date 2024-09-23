@@ -25,6 +25,8 @@ ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))
+raw_data = ROOT / 'data/raw'
+raw_data.mkdir(parents=True, exist_ok=True)
 
 # Initialize Flask API
 app = Flask(__name__)
@@ -88,6 +90,7 @@ def video_feed():
 
 if __name__ == '__main__':
     # Input arguments
+    print("start")
     parser = argparse.ArgumentParser()
     parser.add_argument('--model','--weights', type=str, default=ROOT / 'yolov8s.pt', help='model path or triton URL')
     parser.add_argument('--source', type=str, default=ROOT / 'data/images', help='source directory for images or videos')
@@ -117,7 +120,6 @@ if __name__ == '__main__':
     parser.add_argument('--project', default=ROOT / 'runs/detect', help='save results to project/name')
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--dnn', action='store_true', help='use OpenCV DNN for ONNX inference')
-    parser.add_argument('--raw_data', '--raw-data', default=ROOT / 'data/raw', help='save raw images to data/raw')
     parser.add_argument('--port', default=5000, type=int, help='port deployment')
     opt, unknown = parser.parse_known_args()
 
@@ -127,11 +129,6 @@ if __name__ == '__main__':
     # Get por to deploy
     port = opt.port
     delattr(opt, 'port')
-    
-    # Create path for raw data
-    raw_data = Path(opt.raw_data)
-    raw_data.mkdir(parents=True, exist_ok=True)
-    delattr(opt, 'raw_data')
     
     # Load model (Ensemble is not supported)
     model = YOLO(str(opt.model))
